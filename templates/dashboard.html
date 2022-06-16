@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- Primary Meta Tags -->
+<title>BytePay</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="title" content="BytePay">
+<meta name="author" content="BytePay">
+
+<!--  Social tags -->
+<meta name="keywords" content="BytePay">
+<meta name="description" content="BytePay">
+
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="120x120" href="static/assets/img/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="static/assets/img/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/assets/img/favicon/favicon-16x16.png">
+<link rel="manifest" href="static/assets/img/favicon/site.webmanifest">
+<link rel="mask-icon" href="static/assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Fontawesome -->
+<link type="text/css" href="static/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+
+<!-- Pixel CSS -->
+<link type="text/css" href="static/css/neumorphism.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <header class="header-global">
+    <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg navbar-theme-primary headroom navbar-light">
+        <div class="container position-relative">
+            <a class="navbar-brand shadow-soft py-2 px-3 rounded border border-light mr-lg-4" href="/dashboard">
+                <img class="navbar-brand-dark" src="static/assets/img/brand/dark.svg" alt="Logo light">
+                <img class="navbar-brand-light" src="static/assets/img/brand/dark.svg" alt="Logo dark">
+            </a>
+
+            <div class="d-flex align-items-center">
+              <button id='loginButton' class="btn btn-primary" style="margin-right:20px">
+                Connect to Metamask</button>
+                <a href="/profile" class="btn btn-primary text-secondary d-none d-md-inline-block mr-3">Profile</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+
+<div class="section section-lg pt-0">
+    <div class="container">
+        <!-- End of title-->
+        <div class="row mb-5" style="margin-top:100px;">
+            <div class="col-12 col-md-8 col-lg-6 mb-5 mb-lg-0">
+                <div class="card bg-primary shadow-soft border-light text-center py-4"  style="min-height:550px">
+                    <!-- Header -->
+                    <div class="card-header p-3">
+                        <h3 class="text-gray mb-4">Wallet Balance</h3>
+                        <span class="d-block">
+                                <span class=" font-medium"><b>ETH</b> </span>
+                            <span class="display-2 font-weight-bold" id="balanceText">
+<!--                               {{bpc_balance}} -->
+                        </span>
+                        <!-- <span class="d-block text-gray font-small">/ month</span> -->
+                        </span>
+
+                    </div>
+                    <!-- End Header -->
+                    <!-- Content -->
+                    <div class="card-body" >
+
+                      
+                        
+                        <!-- Tab Nav -->
+                <div class="nav-wrapper position-relative mb-4" >
+                    <ul class="nav nav-pills rounded nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true">
+                              <i class="fas fa-paper-plane"></i>
+                              Send</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false">
+                              <i class="fas fa-plus"></i>
+                              Add</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false">
+                              <i class="fas fa-retweet"></i>
+                              Draw</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- End of Tab Nav -->
+
+                        <!-- Tab Content -->
+                        <div class="tab-content container" id="tabcontent2">
+                            <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                                
+<!--                                 <form action="/send" method="POST"> -->
+                                  <div class="form-group text-left">
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><span class="fas fa-at"></span></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="recipient" name="recipient" aria-describedby="recipient" placeholder="Enter Recipent Address" required>
+                                    </div>
+                                    <p id="recipientId"></p>
+                                    <button type="button" id="recipientSearchButton" style="display:inline" class="btn btn-primary btn-block" onclick='searchRecipient()'>
+                                    Search
+                                  </button>
+                                  </div>
+                                  <div class="form-group text-left" id="send_amt_section" style="display:none" >
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><span class="fas fa-coins"></span></span>
+                                        </div>
+                                        <input type="number" class="form-control" id="send_amt" name="send_amt" aria-describedby="amtHelp" placeholder="Enter ETH amount" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2); isTxnPossible();})(this)" required>
+                                    </div>
+                                    <p id="errorSection"></p>
+                                  </div>
+                                  <button type="submit" id="sendButton" style="display:none" class="btn btn-primary btn-block" onclick="sendTransaction()">
+                                    Send
+                                  </button>
+<!--                                 </form> -->
+
+                            </div>
+                            <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                
+                              <form action="/topup" method="POST">
+                                  <div class="form-group text-left">
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><span class="fas fa-address-card"></span></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="upi_id" name="upi_id" aria-describedby="upi_id" placeholder="Enter UPI Address" required>
+                                    </div>
+                                  </div>
+                                  <div class="form-group text-left">
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                              <span class="fas fa-rupee-sign"></span>
+                                            </span>
+                                        </div>
+                                        <input type="number" step="0.01" min="10" max="100000" class="form-control" id="topup_amt" name="topup_amt" aria-describedby="topup_amt" placeholder="Enter Amount" required>
+                                    </div>
+                                  </div>
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        Add Amount
+                                    </button>
+                              </form>
+                              
+                            </div>
+                            <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+                                
+                                <form action="/withdraw" method="POST">
+                                  <div class="form-group text-left">
+                                    <!-- <label for="exampleInputIcon1">Icon Left</label> -->
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><span class="fas fa-address-card"></span></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="upi_id" name="upi_id" aria-describedby="upi_id" placeholder="Enter UPI Address" required>
+                                    </div>
+                                  </div>
+                                  <div class="form-group text-left">
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                              <span class="fas fa-rupee-sign"></span>
+                                            </span>
+                                        </div>
+                                        <input type="number" step=0.01 min="10" max="100000" class="form-control" id="withdraw_amt" name="withdraw_amt" aria-describedby="withdraw_amt" placeholder="Enter Amount" required>
+                                    </div>
+                                  </div>
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        Withdraw Amount
+                                    </button>
+                              </form>
+
+                            </div>
+                        </div>
+                <!-- End of Tab Content -->
+                    </div>
+                    <!-- End Content -->
+                </div>
+            </div>
+            <div class="col-12 col-md-8 col-lg-6 mb-5 mb-lg-0">
+                <div class="card bg-primary shadow-soft border-light p-4" style="min-height:550px">
+                    <!-- Header -->
+                    <div class="card-header text-center">
+                        <span class="d-block">
+                            <span class="display-4 font-weight-bold">
+                            <!-- <span class="align-top font-medium">$</span> -->
+                              Latest Transactions
+                        </span>
+                       <!--  <span class="text-gray font-small">/ month</span>
+                        </span>  -->
+                    </div>
+                    <!-- End Header -->
+                    <!-- Content -->
+                    <div class="card-body text-center">
+                      
+                      
+                      <table class="table table-hover" id="histroytable">
+                          <tr>
+                              <th class="border-0" scope="col">Date</th>
+                              <th class="border-0" scope="col">Recipient</th>
+                              <th class="border-0" scope="col">Amount</th>
+                              <th class="border-0" scope="col">Hash</th>
+                          </tr>
+                      </table>
+                      <p id="showInfo" style="display:none;"></p>
+                        
+                    </div>
+                    <!-- End Content -->
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+    </main>
+
+
+
+  <script>
+    window.userWalletAddress = null
+    const loginButton = document.getElementById('loginButton')
+    const recipient = document.getElementById('recipient')
+    const recipientId = document.getElementById('recipientId')
+    const send_amt_section = document.getElementById('send_amt_section')
+    const balanceText = document.getElementById('balanceText')
+    const errorSection = document.getElementById('errorSection')
+    const sendButton = document.getElementById('sendButton')
+    const showInfo = document.getElementById('showInfo')
+    let recipientAddress = "";
+    let recipientName = "";
+    let balanceNum = "";
+
+    function toggleButton() {
+      if (!window.ethereum) {
+        loginButton.innerText = 'MetaMask is not installed'
+        return false
+      }
+
+      loginButton.addEventListener('click', loginWithMetaMask)
+    }
+
+    async function loginWithMetaMask() {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+        .catch((e) => {
+          console.error(e.message)
+          return
+        })
+      if (!accounts) { return }
+
+      window.userWalletAddress = accounts[0]
+      loginButton.setAttribute('disabled', 'disabled');
+      loginButton.innerText = "Connected to 0x.." + window.userWalletAddress.slice(38)
+
+      if(window.userWalletAddress){
+        $.ajax({
+                type: "POST",
+                url: "/auth",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  "address": window.userWalletAddress
+                  }),
+                dataType: "json",
+                success: function(response) {
+                    console.log("Auth - ", response['msg']);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        checkBalance();
+        history();
+      }
+
+    }
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+      toggleButton();
+      loginWithMetaMask();
+    });
+
+    
+
+    async function checkBalance() {
+      let balance = await window.ethereum.request({method: "eth_getBalance", 
+                    params: [
+                         window.userWalletAddress,
+                         'latest'
+                      ]
+                                                  }).catch((err)=>{
+        console.log(err);  
+      })      
+      balanceText.innerHTML = (parseInt(balance)/Math.pow(10,18)).toFixed(4);
+      balanceNum = parseInt(balance)/Math.pow(10,18);
+      console.log("Balance for", window.userWalletAddress, "is", parseInt(balance)/Math.pow(10,18));
+    }
+
+    window.onload = function(){
+      if(window.ethereum !== "undefined"){
+        this.ethereum.on("accountsChanged", handleAccountsChanged)
+      }
+    }
+
+    const handleAccountsChanged = (acc) => {
+      console.log("account changed...", acc)
+      window.userWalletAddress = String(acc)
+      loginButton.innerText = "Connected to 0x.." + window.userWalletAddress.slice(38)
+      checkBalance();
+      history();
+      $.ajax({
+                type: "POST",
+                url: "/auth",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  "address": window.userWalletAddress
+                  }),
+                dataType: "json",
+                success: function(response) {
+                    console.log("Auth = ", response['msg']);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+    }
+
+    function searchRecipient(){
+      if(recipient.value == "" || recipient.value == window.userWalletAddress){
+        recipientId.innerText = "Enter correct wallet address"
+      } else {
+        $.ajax({
+                type: "POST",
+                url: "/search",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  "recipient": recipient.value.toLowerCase(),
+                  "senderAddress": window.userWalletAddress
+                }),
+                dataType: "json",
+                success: function(response) {
+                    console.log(response);
+                    if(response['success']){
+                        recipientAddress = response['msg']
+                        recipientId.innerText = "Address: " + recipientAddress;
+                        send_amt_section.style.display = 'inline';
+                        recipientSearchButton.style.display = "none";
+                      } else {
+                        recipientId.innerText = response['msg']
+                        send_amt_section.value = '';
+                        send_amt_section.style.display = 'none';
+                      }
+                },
+                error: function(err) {
+                    console.log(err);
+                    recipientId.innerText = "Something went wrong."
+                    send_amt_section.value = '';
+                    send_amt_section.style.display = 'none';
+                }
+            });
+      }
+    }
+
+
+    function isTxnPossible() {
+      console.log(document.getElementById('send_amt').value, " &&& ", balanceNum)
+      checkBalance()
+      if(document.getElementById('send_amt').value >= balanceNum) {
+        errorSection.innerText = "You do not have enough balance."
+        sendButton.style.display = 'none';
+      } else if(document.getElementById('send_amt').value == 0) {
+        errorSection.innerText = "Amount must be greater than 0."
+        sendButton.style.display = 'none';
+      } else {
+        errorSection.style.display = 'none'
+        sendButton.style.display = 'inline';
+      }
+    }
+
+    async function sendTransaction() {
+      params = [{
+        "from": window.userWalletAddress,
+        "to": recipientAddress,
+        "value": Number(document.getElementById('send_amt').value * 1e18).toString(16)
+      }]
+      let result = await window.ethereum.request({method: "eth_sendTransaction", params})
+        .catch((err)=>{
+          console.log(err)
+      })
+
+
+      $.ajax({
+                type: "POST",
+                url: "/transfer",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  "timestamp": Date.now(),
+                  "senderAddress": window.userWalletAddress,
+                  "recipientAddress": recipientAddress,
+                  "currency": 'eth',
+                  "amt": document.getElementById('send_amt').value,
+                  "hash": result
+                  }),
+                dataType: "json",
+                success: function(response) {
+                    console.log("Txn Recorded - ", response);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+
+        setTimeout(function re() { window.location = "/dashboard"; }, 2000);
+      
+    }
+
+
+    function history(){
+      $.ajax({
+                type: "POST",
+                url: "/history",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  "senderAddress": window.userWalletAddress
+                  }),
+                dataType: "json",
+                success: function(response) {
+                    console.log("Histroy - ", response['msg']);                  
+                    var myTable = document.getElementById('histroytable');
+
+                  if(response['success']){
+                    showInfo.style.display = 'none';
+                    data = response['msg']
+                    for (i in data) {
+                        var tr = myTable.appendChild(document.createElement('tr'));
+                        for (let x = 0; x < 4; x++) { 
+                          var td = tr.appendChild(document.createElement('td'));
+                          if(x==0){ 
+                            htmlToAppend = new Date(data[i]['timestamp']).toLocaleString('en-IN', 
+                               { year:'numeric',month:'numeric',day:'numeric'      
+                              // ,hour:'numeric', minute:'numeric', hour12:false    
+                              }) }
+                          else if(x==1){ 
+                            htmlToAppend = '0x..'+data[i]['recipientAddress'].slice(38) }
+                          else if(x==2){ 
+                            htmlToAppend = data[i]['currency'].toUpperCase()+' '+data[i]['amt'] }
+                          else if(x==3){ 
+                            htmlToAppend = '0x..'+data[i]['hash'].slice(62) }
+                          td.innerHTML = htmlToAppend;
+                        }
+                    }
+                  } else {
+                    myTable.innerHTML = "";
+                    showInfo.style.display = 'inline';
+                    showInfo.innerText = response['msg']  
+                  }
+                  
+                  
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+    }
+
+    
+  </script>
+
+
+  
+
+    <!-- Core -->
+<script src="static/vendor/jquery/dist/jquery.min.js"></script>
+<script src="static/vendor/popper.js/dist/umd/popper.min.js"></script>
+<script src="static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="static/vendor/headroom.js/dist/headroom.min.js"></script>
+
+<!-- Vendor JS -->
+<script src="static/vendor/onscreen/dist/on-screen.umd.min.js"></script>
+<script src="static/vendor/nouislider/distribute/nouislider.min.js"></script>
+<script src="static/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="static/vendor/waypoints/lib/jquery.waypoints.min.js"></script>
+<script src="static/vendor/jarallax/dist/jarallax.min.js"></script>
+<script src="static/vendor/jquery.counterup/jquery.counterup.min.js"></script>
+<script src="static/vendor/jquery-countdown/dist/jquery.countdown.min.js"></script>
+<script src="static/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+<script src="static/vendor/prismjs/prism.js"></script>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Neumorphism JS -->
+<script src="static/assets/js/neumorphism.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,4 @@
+flask
+uuid
+pyrebase
+gunicorn

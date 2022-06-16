@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- Primary Meta Tags -->
+<title>BytePay - Profile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="title" content="BytePay - Profile">
+<meta name="author" content="BytePay - Profile">
+
+<!--  Social tags -->
+<meta name="keywords" content="BytePay, Profile">
+<meta name="description" content="BytePay - Profile">
+
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="120x120" href="static/assets/img/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="static/assets/img/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/assets/img/favicon/favicon-16x16.png">
+<link rel="manifest" href="static/assets/img/favicon/site.webmanifest">
+<link rel="mask-icon" href="static/assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Fontawesome -->
+<link type="text/css" href="static/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+
+<!-- Pixel CSS -->
+<link type="text/css" href="static/css/neumorphism.css" rel="stylesheet">
+
+<!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
+
+</head>
+
+<body>
+    <header class="header-global">
+    <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg navbar-theme-primary headroom navbar-light">
+        <div class="container position-relative">
+            <a class="navbar-brand shadow-soft py-2 px-3 rounded border border-light mr-lg-4" href="/dashboard">
+                <img class="navbar-brand-dark" src="static/assets/img/brand/dark.svg" alt="Logo light">
+                <img class="navbar-brand-light" src="static/assets/img/brand/dark.svg" alt="Logo dark">
+            </a>
+            <div class="navbar-collapse collapse" id="navbar_global">
+                <div class="navbar-collapse-header">
+                    <div class="row">
+                        <div class="col-6 collapse-brand">
+                            <a href="static/index.html" class="navbar-brand shadow-soft py-2 px-3 rounded border border-light">
+                                <img src="static/assets/img/brand/dark.svg" alt="Themesberg logo">
+                            </a>
+                        </div>
+                        <div class="col-6 collapse-close">
+                            <a href="#navbar_global" class="fas fa-times" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center">
+              <button id='loginButton' class="btn btn-primary" style="margin-right:20px">
+                Connect to Metamask</button>
+                <a href="/dashboard" class="btn btn-primary text-secondary d-none d-md-inline-block mr-3">Wallet</a>
+            </div>
+        </div>
+    </nav>
+</header>
+    <main>
+<section class="section section-lg pt-0">
+    <div class="container">
+        <!-- Title -->
+        <div class="row">
+            <div class="col text-center">
+                <h2 class="h5 mb-7"></h2>
+            </div>
+        </div>
+        <!-- End of title-->
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-md-10 col-lg-8 mb-7 mb-lg-0">
+                <div class="card bg-primary shadow-soft border-light p-4" style="min-height:550px">
+                    <!-- Header -->
+                    <div class="card-header text-center">
+                        <span class="d-block">
+                            <span class="display-4 font-weight-bold">
+                              My Profile
+                        </span>
+                    </div>
+                    <!-- End Header -->
+                    <!-- Content -->
+                    <div class="card-body">
+                        
+                                    <!-- Form -->
+                                    <div class="form-group">
+                                        <label for="profileemail">Change Email</label>
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><span class="fas fa-envelope"></span></span>
+                                            </div>
+                                            <input class="form-control" id="profileemail" placeholder="Enter Email Address" type="text" aria-label="email adress" >
+                                          <button class="btn btn-sm btn-primary" type="button" onclick="updateEmail(profileemail.value)">Update</button>
+                                        </div>
+                                    </div>
+                                    <!-- End of Form -->
+
+                      
+
+                                <div class="form-group" id="apidetails">
+                                  <label for="exampleInputIcon5">Merchant ID</label>
+                                  <div class="input-group mb-4">
+                                            <input class="form-control" type="text" disabled id="merchantID">
+                                        </div>
+                                  <label for="exampleInputIcon5">Secret Key</label>
+                                  <div class="input-group mb-4">
+                                            <input class="form-control" type="text" disabled id="secretKey">
+                                                <button class="btn btn-sm btn-primary" type="submit" onclick="resetSecret()">Reset</button>
+                                    
+                                        </div>
+                                    </div>
+                        
+                    </div>
+                    <!-- End Content -->
+                </div>
+            </div>
+          </div>
+      
+        </div>
+    </div>
+</section>
+
+    </main>
+
+
+
+  
+  
+
+  <script>
+    window.userWalletAddress = null
+    const loginButton = document.getElementById('loginButton')
+    const merchantID = document.getElementById('merchantID')
+    const secretKey = document.getElementById('secretKey')
+    const profileemail = document.getElementById('profileemail')
+    
+    function toggleButton() {
+      if (!window.ethereum) {
+        loginButton.innerText = 'MetaMask is not installed'
+        return false
+      }
+
+      loginButton.addEventListener('click', loginWithMetaMask)
+    }
+
+    async function loginWithMetaMask() {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+        .catch((e) => {
+          console.error(e.message)
+          return
+        })
+      if (!accounts) { return }
+
+      window.userWalletAddress = accounts[0]
+      loginButton.setAttribute('disabled', 'disabled');
+      loginButton.innerText = "Connected to 0x.." + window.userWalletAddress.slice(38)
+
+      if(window.userWalletAddress){
+        $.ajax({
+                type: "POST",
+                url: "/auth",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  "address": window.userWalletAddress
+                  }),
+                dataType: "json",
+                success: function(response) {
+                    console.log("Auth - ", response['msg']);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+      }
+      
+      profiledetails();
+
+    }
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+      toggleButton();
+      loginWithMetaMask();
+    });
+
+    window.onload = function(){
+      if(window.ethereum !== "undefined"){
+        this.ethereum.on("accountsChanged", handleAccountsChanged)
+      }
+    }
+
+    const handleAccountsChanged = (acc) => {
+      console.log("account changed...", acc)
+      window.userWalletAddress = String(acc)
+      loginButton.innerText = "Connected to 0x.." + window.userWalletAddress.slice(38)
+      $.ajax({
+                type: "POST",
+                url: "/auth",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  "address": window.userWalletAddress
+                  }),
+                dataType: "json",
+                success: function(response) {
+                    console.log("Auth = ", response['msg']);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+      profiledetails();
+    }
+
+    function profiledetails(){
+      $.ajax({
+                type: "POST",
+                url: "/profiledetails",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  "address": window.userWalletAddress
+                  }),
+                dataType: "json",
+                success: function(response) {
+                    console.log("Profile Details = ", response['msg']);
+                    merchantID.value = response['msg'].address
+                    secretKey.value = response['msg'].secret
+                    if(response['msg'].email!=""){
+                      profileemail.value = response['msg'].email
+                    }
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+    }
+
+    function resetSecret(){
+      $.ajax({
+                type: "POST",
+                url: "/resetsecret",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  "address": window.userWalletAddress
+                  }),
+                dataType: "json",
+                success: function(response) {
+                    console.log("New secret key - ", response['msg']);
+                    secretKey.value = response['msg'].secret
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+    }
+
+    function updateEmail(emailinput){
+      if(emailinput!="" && emailinput.includes("@")){
+        $.ajax({
+                type: "POST",
+                url: "/updateemail",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  "address": window.userWalletAddress,
+                  "email": emailinput
+                  }),
+                dataType: "json",
+                success: function(response) {
+                    console.log("New email - ", response['msg']);
+                    profileemail.value = response['msg'].email
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+      } else {
+        console.log("Enter email address")
+      }
+      
+    }
+
+    
+  </script>
+    
+
+    <!-- Core -->
+<script src="static/vendor/jquery/dist/jquery.min.js"></script>
+<script src="static/vendor/popper.js/dist/umd/popper.min.js"></script>
+<script src="static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="static/vendor/headroom.js/dist/headroom.min.js"></script>
+
+<!-- Vendor JS -->
+<script src="static/vendor/onscreen/dist/on-screen.umd.min.js"></script>
+<script src="static/vendor/nouislider/distribute/nouislider.min.js"></script>
+<script src="static/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="static/vendor/waypoints/lib/jquery.waypoints.min.js"></script>
+<script src="static/vendor/jarallax/dist/jarallax.min.js"></script>
+<script src="static/vendor/jquery.counterup/jquery.counterup.min.js"></script>
+<script src="static/vendor/jquery-countdown/dist/jquery.countdown.min.js"></script>
+<script src="static/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+<script src="static/vendor/prismjs/prism.js"></script>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Neumorphism JS -->
+<script src="static/assets/js/neumorphism.js"></script>
+</body>
+
+</html>

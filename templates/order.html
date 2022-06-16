@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- Primary Meta Tags -->
+<title>BytePay - Order</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="title" content="BytePay - Order">
+<meta name="author" content="BytePay">
+  
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="120x120" href="../static/assets/img/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../static/assets/img/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../static/assets/img/favicon/favicon-16x16.png">
+<link rel="manifest" href="../static/assets/img/favicon/site.webmanifest">
+<link rel="mask-icon" href="../static/assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+  
+<!-- Fontawesome -->
+<link type="text/css" href="../static/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+
+<!-- Pixel CSS -->
+<link type="text/css" href="../static/css/neumorphism.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <header class="header-global">
+    <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg navbar-theme-primary headroom navbar-light">
+        <div class="container position-relative">
+            <a class="navbar-brand shadow-soft py-2 px-3 rounded border border-light mr-lg-4" href="#">
+                <img class="navbar-brand-dark" src="../static/assets/img/brand/dark.svg" alt="Logo light">
+                <img class="navbar-brand-light" src="../static/assets/img/brand/dark.svg" alt="Logo dark">
+            </a>
+            <div class="d-flex align-items-center">
+              <div style="margin-right:20px">
+              <button id='loginButton' onclick="" class="btn btn-block btn-primary"> Connect to Metamask</button>
+              </div>
+              {% if order_status == 1 %}
+                <a href="{{failredirecturl}}">
+                  <input type="submit" class="btn btn-primary" value="Cancel">
+                </a>
+              {% endif %}
+                <button class="navbar-toggler ml-2" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+
+<div class="section section-lg pt-0">
+    <div class="container">
+        <!-- Title -->
+        <div class="row">
+            <div class="col text-center">
+                <h2 class="h5 mb-7"></h2>
+            </div>
+        </div>
+        <!-- End of title-->
+        <div class="row mb-5  justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6 mb-5 mb-lg-0">
+                <div class="card bg-primary shadow-soft border-light text-center py-4"  style="min-height:550px">
+                    <!-- Header -->
+                    <div class="card-header p-3">
+                        <h3 class="text-gray mb-4">Current Wallet Balance</h3>
+                        <span class="d-block">
+                                <span class=" font-medium"><b>ETH</b> </span>
+                            <span class="display-2 font-weight-bold" id="balanceText">
+                        </span>
+                        <!-- <span class="d-block text-gray font-small">/ month</span> -->
+                        </span>
+
+                    </div>
+                    <!-- End Header -->
+                    <!-- Content -->
+                    <div class="card-body" >
+
+                      
+                        
+                        <!-- Tab Nav -->
+                <div class="nav-wrapper position-relative mb-4" >
+                    <ul class="nav nav-pills rounded nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true">
+                              <i class="fas fa-paper-plane"></i>
+                              Pay</a>
+                        </li>
+                        {% if order_status == 1 %}
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false">
+                              <i class="fas fa-plus"></i>
+                              Add</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <!-- End of Tab Nav -->
+
+                        <!-- Tab Content -->
+                        <div class="tab-content container" id="tabcontent2">
+                            <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                                
+
+                                  <div class="card-header p-3">
+                                      <h4 class="text-gray mb-3">Amount To Be Paid</h4>
+                                      <span class="d-block">
+                                          <span class="display-3 font-weight-bold">
+                                              <span class=" font-medium">ETH</span>{{amt}}
+                                      </span>
+                                      <!-- <span class="d-block text-gray font-small">/ month</span> -->
+                                      </span>
+                                    <button type="submit" id="checkButton" name="checkButton" class="btn btn-primary btn-block"  onclick="isTxnPossible()" hidden>check</button>
+              
+                                  </div>
+<!--                               <form action="/payment" method="POST"> -->
+                                <input type="text" id="order_id" name="order_id" value="{{order_id}}" hidden>                              {% if order_status == 1 %}
+                                  
+                                    
+                              <p id="errorSection"></p>
+                                
+                                    <button type="submit" id="sendButton" name="sendButton" class="btn btn-primary btn-block"  onclick="sendTransaction()" style="display:none;">
+                                        <!-- <span class="fas fa-cart-plus mr-3"></span> -->
+                                        Make Payment
+                                    </button>
+                              {% elif order_status == 2 %}
+                                <div class="alert alert-success alert-dismissible shadow-soft fade show" role="alert"><span class="alert-inner--icon"><span class="far fa-thumbs-up"></span></span> <span class="alert-inner--text"><strong>Paid!</strong> Payment is successful.</span> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                              {% else %}
+                              <div class="alert alert-danger alert-dismissible shadow-soft fade show" role="alert"><span class="alert-inner--icon"><span class="fas fa-fire"></span></span> <span class="alert-inner--text"><strong>Oh snap!</strong> Something's wrong.</span> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                              {% endif %}
+<!--                               </form> -->
+                              
+                            </div>
+                          
+                            <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                              <form action="/checkouttopup" method="POST">
+                                <input type="text" id="order_id" name="order_id" value="{{order_id}}" hidden>
+                                  <div class="form-group text-left">
+                                    <!-- <label for="exampleInputIcon1">Icon Left</label> -->
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><span class="fas fa-address-card"></span></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="upi_id" name="upi_id" aria-describedby="upi_id" placeholder="Enter UPI Address" required>
+                                    </div>
+                                  </div>
+                                  <div class="form-group text-left">
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                              <span class="fas fa-rupee-sign"></span>
+                                            </span>
+                                        </div>
+                                        <input type="number" step=0.01 min="10" max="100000" class="form-control" id="topup_amt" name="topup_amt" aria-describedby="topup_amt" placeholder="Enter Amount" required>
+                                    </div>
+                                  </div>
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        Add Amount
+                                    </button>
+                              </form>
+
+                            </div>
+                        </div>
+                <!-- End of Tab Content -->
+
+                    </div>
+                    <!-- End Content -->
+                </div>
+            </div>
+          
+        </div>
+        </div>
+    </div>
+</div>
+
+    </main>
+
+
+  
+  <script>
+    window.userWalletAddress = null
+    const loginButton = document.getElementById('loginButton')
+    const orderid = "{{order_id}}"
+    const orderstatus = "{{order_status}}"
+    const recipient = "{{recipientAddress}}"
+    const send_amt = "{{amt}}"
+    const currency = "{{currency}}"
+    const successredirecturl = "{{successredirecturl}}"
+    const failredirecturl = "{{failredirecturl}}"
+    const balanceText = document.getElementById('balanceText')
+    const errorSection = document.getElementById('errorSection')
+    const checkButton = document.getElementById('checkButton')
+    const sendButton = document.getElementById('sendButton')
+    let balanceNum = "";
+    let txnid = ""
+    
+    function toggleButton() {
+      if (!window.ethereum) {
+        loginButton.innerText = 'MetaMask is not installed'
+        return false
+      }
+
+      loginButton.addEventListener('click', loginWithMetaMask)
+    }
+
+    async function loginWithMetaMask() {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+        .catch((e) => {
+          console.error(e.message)
+          return
+        })
+      if (!accounts) { return }
+
+      window.userWalletAddress = accounts[0]
+      loginButton.setAttribute('disabled', 'disabled');
+      loginButton.innerText = "Connected to 0x.." + window.userWalletAddress.slice(38)
+
+      checkBalance() 
+
+      $.ajax({
+                type: "POST",
+                url: "/auth",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  "address": window.userWalletAddress
+                  }),
+                dataType: "json",
+                success: function(response) {
+                    console.log("Auth - ", response['msg']);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+      
+    }
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+      toggleButton()
+      loginWithMetaMask()
+      if(orderstatus==1){
+        setTimeout(function re() { checkButton.click(); }, 1000);
+      }
+    });
+
+    
+
+    async function checkBalance() {
+      let balance = await window.ethereum.request({method: "eth_getBalance", 
+                    params: [
+                         window.userWalletAddress,
+                         'latest'
+                      ]
+                                                  }).catch((err)=>{
+        console.log(err);  
+      })      
+      balanceText.innerHTML = (parseInt(balance)/Math.pow(10,18)).toFixed(4);
+      balanceNum = parseInt(balance)/Math.pow(10,18);
+      console.log("Balance for", window.userWalletAddress, "is", parseInt(balance)/Math.pow(10,18));
+    }
+
+    window.onload = function(){
+      if(window.ethereum !== "undefined"){
+        this.ethereum.on("accountsChanged", handleAccountsChanged)
+      }
+    }
+
+    const handleAccountsChanged = (acc) => {
+      console.log("account changed...", acc)
+      window.userWalletAddress = String(acc)
+      loginButton.innerText = "Connected to 0x.." + window.userWalletAddress.slice(38)
+      checkBalance()
+      if(orderstatus==1){
+        setTimeout(function re() { checkButton.click(); }, 1000);
+      }
+      $.ajax({
+                type: "POST",
+                url: "/auth",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  "address": window.userWalletAddress
+                  }),
+                dataType: "json",
+                success: function(response) {
+                    console.log("Auth = ", response['msg']);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+    }
+
+
+    function isTxnPossible() {
+      console.log(send_amt, " &&& ", balanceNum)
+      checkBalance()
+      if(recipient == window.userWalletAddress) {
+        errorSection.innerText = "Cannot send to same wallet address."
+        sendButton.style.display = 'none';
+      } else if(send_amt == 0) {
+        errorSection.innerText = "Amount must be greater than 0."
+        sendButton.style.display = 'none';
+      } else if(send_amt >= balanceNum) {
+        errorSection.innerText = "You do not have enough balance."
+        sendButton.style.display = 'none';
+      } else {
+        errorSection.style.display = 'none'
+        sendButton.style.display = 'inline';
+      }
+    }
+
+    async function sendTransaction() {
+      params = [{
+        "from": window.userWalletAddress,
+        "to": recipient,
+        "value": Number(send_amt * 1e18).toString(16)
+      }]
+      let result = await window.ethereum.request({method: "eth_sendTransaction", params})
+        .catch((err)=>{
+          console.log(err)
+      })
+
+      if(result){
+        $.ajax({
+                  type: "POST",
+                  url: "/transfer",
+                  contentType: "application/json",
+                  data: JSON.stringify({
+                    "timestamp": Date.now(),
+                    "senderAddress": window.userWalletAddress,
+                    "recipientAddress": recipient,
+                    "currency": currency,
+                    "amt": send_amt,
+                    "hash": result
+                    }),
+                  dataType: "json",
+                  success: function(response) {
+                      console.log("Txn Recorded - ", response['msg']);
+                      txnid = response['msg'];
+                      setTimeout(orderupdate(), 2000);
+                  },
+                  error: function(err) {
+                      console.log(err);
+                      setTimeout(function re() { window.location = failredirecturl; }, 2000);
+                  }
+              });
+          
+          setTimeout(function re() { window.location = successredirecturl; }, 2000);
+      } else {
+        console.log("No result came.")
+      }
+      
+    }
+
+
+
+    function orderupdate(){
+      $.ajax({
+                  type: "POST",
+                  url: "/updateorder",
+                  contentType: "application/json",
+                  data: JSON.stringify({
+                    "senderAddress": window.userWalletAddress,
+                    "status": 2,
+                    "txnID": txnid,
+                    "orderid": orderid,
+                    }),
+                  dataType: "json",
+                  success: function(response) {
+                      console.log("Order Updated - ", response);
+                  },
+                  error: function(err) {
+                      console.log(err);
+                      setTimeout(function re() { window.location = failredirecturl; }, 2000);
+                  }
+              });
+    }
+    
+  </script>
+
+
+
+
+  
+ 
+    <!-- Core -->
+<script src="../static/vendor/jquery/dist/jquery.min.js"></script>
+<script src="../static/vendor/popper.js/dist/umd/popper.min.js"></script>
+<script src="../static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../static/vendor/headroom.js/dist/headroom.min.js"></script>
+
+<!-- Vendor JS -->
+<script src="../static/vendor/onscreen/dist/on-screen.umd.min.js"></script>
+<script src="../static/vendor/nouislider/distribute/nouislider.min.js"></script>
+<script src="../static/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="../static/vendor/waypoints/lib/jquery.waypoints.min.js"></script>
+<script src="../static/vendor/jarallax/dist/jarallax.min.js"></script>
+<script src="../static/vendor/jquery.counterup/jquery.counterup.min.js"></script>
+<script src="../static/vendor/jquery-countdown/dist/jquery.countdown.min.js"></script>
+<script src="../static/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+<script src="../static/vendor/prismjs/prism.js"></script>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Neumorphism JS -->
+<script src="../static/assets/js/neumorphism.js"></script>
+</body>
+
+</html>

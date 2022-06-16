@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- Primary Meta Tags -->
+<title>Metamask</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="title" content="Metamask">
+<meta name="author" content="Bytepay">
+
+<!--  Social tags -->
+<meta name="keywords" content="metamask, bytepay">
+<meta name="description" content="metamask, bytepay">
+
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="120x120" href="static/assets/img/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="static/assets/img/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/assets/img/favicon/favicon-16x16.png">
+<link rel="manifest" href="static/assets/img/favicon/site.webmanifest">
+<link rel="mask-icon" href="static/assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Fontawesome -->
+<link type="text/css" href="static/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+
+<!-- Pixel CSS -->
+<link type="text/css" href="static/css/neumorphism.css" rel="stylesheet">
+
+<!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
+
+</head>
+
+<body>
+    <main>
+        <!-- Section -->
+        <section class="min-vh-100 d-flex bg-primary align-items-center">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-6 justify-content-center">
+                        <div class="card bg-primary shadow-soft border-light p-4">
+                            <div class="card-header text-center pb-0">
+                              <img src="./static/images/metamask.png" width="300px">
+                            </div>
+                            <div class="card-body text-center">
+                              
+                                  <button id='loginButton' onclick="" class="btn btn-block btn-primary"> Connect to Metamask
+                                  </button>
+                                <br>
+                                  <p id='userWallet'></p>
+
+                              {% if order_id %}
+                              <button type="submit" class="btn btn-block btn-primary " style="display:none" id="proceedButton" onclick="(function re() { window.location = '/order/{{order_id}}'; })(this)">Proceed</button>
+                              {% else %}
+                                    <button type="submit" class="btn btn-block btn-primary " style="display:none" id="proceedButton" onclick="(function re() { window.location = '/dashboard'; })(this)">Proceed</button>
+                              {% endif %}
+                              
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+
+  
+  <script>
+    window.userWalletAddress = null
+    const loginButton = document.getElementById('loginButton')
+    const userWallet = document.getElementById('userWallet')
+    const proceedButton = document.getElementById('proceedButton')
+
+    function toggleButton() {
+      if (!window.ethereum) {
+        loginButton.innerText = 'MetaMask is not installed'
+        return false
+      }
+
+      loginButton.addEventListener('click', loginWithMetaMask)
+    }
+
+    async function loginWithMetaMask() {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+        .catch((e) => {
+          console.error(e.message)
+          return
+        })
+      if (!accounts) { return }
+
+      window.userWalletAddress = accounts[0]
+      userWallet.innerText = "Connected to " + window.userWalletAddress
+      loginButton.style.display = "none"
+      proceedButton.style.display = "inline"      
+    }
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+      toggleButton()
+      loginWithMetaMask()
+    });
+
+    
+
+    window.onload = function(){
+      if(window.ethereum !== "undefined"){
+        this.ethereum.on("accountsChanged", handleAccountsChanged)
+      }
+    }
+
+    const handleAccountsChanged = (acc) => {
+      console.log("account changed...", acc)
+      window.userWalletAddress = String(acc)
+      userWallet.innerText = "Connected to " + window.userWalletAddress
+    }
+    
+  </script>
+
+  
+
+    <!-- Core -->
+<script src="static/vendor/jquery/dist/jquery.min.js"></script>
+<script src="static/vendor/popper.js/dist/umd/popper.min.js"></script>
+<script src="static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="static/vendor/headroom.js/dist/headroom.min.js"></script>
+
+<!-- Vendor JS -->
+<script src="static/vendor/onscreen/dist/on-screen.umd.min.js"></script>
+<script src="static/vendor/nouislider/distribute/nouislider.min.js"></script>
+<script src="static/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="static/vendor/waypoints/lib/jquery.waypoints.min.js"></script>
+<script src="static/vendor/jarallax/dist/jarallax.min.js"></script>
+<script src="static/vendor/jquery.counterup/jquery.counterup.min.js"></script>
+<script src="static/vendor/jquery-countdown/dist/jquery.countdown.min.js"></script>
+<script src="static/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+<script src="static/vendor/prismjs/prism.js"></script>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Neumorphism JS -->
+<script src="static/assets/js/neumorphism.js"></script>
+</body>
+
+</html>
